@@ -7,7 +7,7 @@ export default {
 
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
-    title: 'crowdfunding-nuxt',
+    title: 'Crowdfunding',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -44,11 +44,36 @@ export default {
     '@nuxtjs/axios',
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
+    // https://auth.nuxtjs.org
+    '@nuxtjs/auth-next',
   ],
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
-  axios: {},
+  axios: {
+    baseURL: 'http://localhost:3000/',
+  },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {},
+
+  auth: {
+    strategies: {
+      local: {
+        token: {
+          property: 'data.token',
+          // required: true,
+          // type: 'Bearer'
+        },
+        user: {
+          property: 'data',
+          // autoFetch: true
+        },
+        endpoints: {
+          login: { url: '/api/v1/sessions', method: 'post' },
+          logout: false,
+          user: { url: '/api/v1/users/fetch', method: 'get' },
+        },
+      },
+    },
+  },
 }

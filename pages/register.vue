@@ -12,10 +12,10 @@
               >Full Name</label
             >
             <input
+              v-model="register.name"
               type="text"
               class="auth-form focus:outline-none focus:bg-purple-hover focus:shadow-outline focus:border-purple-hover-stroke focus:text-gray-100"
               placeholder="Write Your Name Here"
-              value="Julia Keeva Hanna"
             />
           </div>
         </div>
@@ -25,10 +25,10 @@
               >Occupation</label
             >
             <input
+              v-model="register.occupation"
               type="text"
               class="auth-form focus:outline-none focus:bg-purple-hover focus:shadow-outline focus:border-purple-hover-stroke focus:text-gray-100"
               placeholder="Write your occupation here"
-              value="Graphic Designer"
             />
           </div>
         </div>
@@ -38,10 +38,10 @@
               >Email Address</label
             >
             <input
+              v-model="register.email"
               type="email"
               class="auth-form focus:outline-none focus:bg-purple-hover focus:shadow-outline focus:border-purple-hover-stroke focus:text-gray-100"
               placeholder="Write your email address here"
-              value="julia.keeva@gmail.com"
             />
           </div>
         </div>
@@ -51,17 +51,18 @@
               >Password</label
             >
             <input
+              v-model="register.password"
               type="password"
               class="auth-form focus:outline-none focus:bg-purple-hover focus:shadow-outline focus:border-purple-hover-stroke focus:text-gray-100"
               placeholder="Type your password here"
-              value="nasigorenglimaribbu"
+              @keyup.enter="userRegister"
             />
           </div>
         </div>
         <div class="mb-6">
           <div class="mb-4">
             <button
-              @click="$router.push({ path: '/upload' })"
+              @click="userRegister"
               class="block w-full bg-orange-button hover:bg-green-button text-white font-semibold px-6 py-4 text-lg rounded-full"
             >
               Continue Sign Up
@@ -84,6 +85,30 @@
 <script>
 export default {
   layout: 'auth',
+  data() {
+    return {
+      register: {
+        name: '',
+        email: '',
+        occupation: '',
+        password: '',
+      },
+    }
+  },
+  methods: {
+    async userRegister() {
+      try {
+        let response = await this.$axios.post('/api/v1/users', this.register)
+        this.$auth.setUserToken(response.data.data.token).then(() =>
+          this.$router.push({
+            path: '/upload',
+          })
+        )
+      } catch (error) {
+        console.log({ error })
+      }
+    },
+  },
 }
 </script>
 
